@@ -1,6 +1,8 @@
 # Teletext Emulator for the C64
 This directory contains an emulator of the BBC Micro's Mode 7 teletext display mode for the Commodore C64.
 
+![Teletext Test Card on Vice](testcard.png)
+
 The emulator consists of a small <3K driver file loaded at &C000 in the C64 address map.
 It exposes a set of routines at that address from which a user program can then use to
 interact with the teletext screen.
