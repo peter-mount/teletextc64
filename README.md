@@ -140,8 +140,8 @@ sixel (6 pixel) graphics characters.
 | 95 149 | Graphics magenta |
 | 96 150 | Graphics cyan |
 | 97 151 | Graphics white |
-| 153 | Contiguous graphics |
-| 154 | Separated graphics |
+| 99 153 | Contiguous graphics |
+| 9A 154 | Separated graphics |
 
 Note: &90 (144) is not supported on the BBC Micro but is defined in latter Teletext standards.
 It's implemented here as it required no coding to implement.
@@ -152,16 +152,17 @@ The following codes are not implemented.
 
 | Char   | Action |
 | ------ | ------ |
-| 136 | Flash |
-| 137 | Steady |
-| 152 | Conceal |
-| 155 | Toggle between character sets* |
-| 158 | Hold graphics |
-| 159 | Release graphics |
+| 88 136 | Flash |
+| 89 137 | Steady |
+| 98 152 | Conceal |
+| 9B 155 | Toggle between character sets* |
+| 9E 158 | Hold graphics |
+| 9F 159 | Release graphics |
+
 Note: Flash (136) & Steady (137) are unlikely to be implemented due to no support for changing colours in VIC-II chip.
 
-155 is not implemented on the BBC micro but supported in BBC Masic (Windows 6.14a) and BBCDSL.
-We only have 1 character set available so that code will do nothing.
+155 is not implemented on the BBC micro but supported in BBC Basic (Windows 6.14a) and BBCSDL.
+As we only have 1 character set available so that code will do nothing.
 
 ### Implementation Quirks
 These items apply due to our implementation:
