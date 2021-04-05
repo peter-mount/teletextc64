@@ -172,3 +172,44 @@ These items apply due to our implementation:
 * Scrolling is not supported. When the bottom of the screen is reached the cursor will wrap to the top.
 * Text windows are not supported.
 * Writing direct to screen ram (&7C00 on BBC B, &0400 on the C64) will not cause the character to appear immediately. You need to call refreshScreen for it to appear.
+
+## Building
+
+To build you will need gnumake, beebasm and vice installed - the latter for the c1541 tool to create a d64 disk image.
+
+Run make and it will assemble several files:
+
+| local filename | filename in disk image | contents |
+| -------- | ---------------------- | -------- |
+| testcard.d64 | | d64 disk image containing the other files |
+| teletext.prg | teletext | teletext emulator |
+| testcard.prg | testcard | Example test card as seen above |
+| splash.prg | splash | Graphics example of a train in teletext |
+
+To use it in your own application, simply copy the teletext file from the disk image to your own image.
+Load it using `LOAD "teletext",8,1` or the equivalent in assembly, see below.
+
+Then, in your own code then initialise it with `JSR &C000` then use oswrch or writeString routines in your own code.
+
+To view the test cards, simply load them in memory followed by a call to refreshScreen:
+Remember the initialise routine at &C000 must have been called first.
+
+                LDA #8                      ; Logical file number
+                LDX #8                      ; Device 8 disk
+                LDY #1                      ; Load with address in file
+                JSR SETLFS
+            
+                JSR strLen                  ; Get filename length
+                LDA #8                      ; Filename length
+                LDX #<fileName              ; SETNAM on filename
+                LDY #>fileName
+                JSR SETNAM
+            
+                LDA #0                      ; Flag LOAD
+                JSR LOAD                    ; Load into memory
+                JMP &C014                   ; Refresh screen
+    .fileName   EQUS "testcard", 0
+
+Each of the provided examples are in PRG format so they will load at address &0400.
+The call to refreshScreen simply refreshes the C64's actual screen with the correct representation
+from those files.
