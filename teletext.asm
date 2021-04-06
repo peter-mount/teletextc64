@@ -81,8 +81,10 @@ defaultColour   = &10           ; White on Black at start of each line
 .oswrch         JMP oswrchInt                   ; Write char to screen              VDU A
 .writeString    JMP writeStringInt              ; Write null terminated string in XY
 .refreshScreen  JMP refreshScreenInt            ; Refresh the screen to the buffer state
-.clearStatusV   JMP clearStatus
-.showStatusV    JMP showStatus
+.clearStatusV   JMP clearStatus                 ; Clear status area
+.showStatusV    JMP showStatus                  ; Show text in status area
+.getPosV        JMP getPos                      ; Get cursor position in X,Y
+.setPosV        JMP setPos                      ; Set cursor to position in X,Y
 
 ; **********************************************************************
 
@@ -180,6 +182,11 @@ defaultColour   = &10           ; White on Black at start of each line
     STA screenPos+1
     LDA #>textRam                               ; textPos = textRam
     STA textPos+1
+    RTS
+
+.getPos                                         ; Return cursor position in X,Y
+    LDX textX
+    LDY textY
     RTS
 
 .setPos                                         ; Set cursor to X,Y

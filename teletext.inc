@@ -98,3 +98,9 @@ clearStatus     = refreshScreen + 3
 ; showStatus    Writes a null terminated string in the status area. The text will be left justified
 ;               and limited to the status area.
 showStatus      = clearStatus + 3
+
+; Get cursor position in X,Y
+getPos          = showStatus + 3
+
+; Set cursor to position in X,Y
+setPos          = getPos + 3

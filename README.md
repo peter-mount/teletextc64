@@ -78,6 +78,23 @@ This routine will refresh the screen with the contents of the framebuffer. It's 
 outside of the driver - for example by loading a screen directly from disk. In that instance refreshScreen needs to be
 called, so the actual screen is displayed.
 
+### C017 clearStatus
+
+The status area is the right half of the top line. Usually used in viewdata style applications
+to show a status, clock or the page identity of what's visible.
+
+This routine clears just that half of the line.
+
+### C01A showStatus
+
+The status area is the right half of the top line. Usually used in viewdata style applications
+to show a status, clock or the page identity of what's visible.
+
+This routine writes the null terminated string pointed to by XY into the status area.
+The string is limited to just that area so will be truncated if too long but if it's short
+then the line will be padded with spaces.
+The string will be left justified.
+
 ## Memory Map
 The driver requires a total of 13K of memory + 16 bytes of zero page:
 
@@ -225,3 +242,15 @@ Remember the initialise routine at &C000 must have been called first.
 Each of the provided examples are in PRG format so they will load at address &0400.
 The call to refreshScreen simply refreshes the C64's actual screen with the correct representation
 from those files.
+
+## Character sets
+
+There's now 3 character sets available which currently require a build to switch between:
+
+| source | Contents |
+| ------ | -------- |
+| charset1 | The default character set based on the original Mullard SAA5050 chip used in the BBC Micro |
+| charset2 | The default BBC character set used in Mode's 0..6 |
+| charset3 | charset2 with the teletext characters for 1/2, 1/4, 3/4 etc replacing the ASCII glyphs |
+
+To change the character set in use just change the include at the end of teletext.asm.

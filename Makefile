@@ -9,8 +9,6 @@ ASCIICARD	= asciicard.prg		# Teletext ASCII chart Text mode
 GRAPHICSCARD= graphicscard.prg	# Teletext ASCII chart Graphics mode
 DISK		= testcard.d64
 
-TELETEXTSRC = teletext.asm charset.asm
-
 TARGETS = $(TELETEXT) $(SPLASH) $(TESTCARD) $(ASCIICARD) $(GRAPHICSCARD)
 
 export CP				= @cp -p
@@ -27,7 +25,7 @@ clean:
 $(DISK): $(TARGETS)
 
 # TELETEXT - the teletext emulator
-$(TELETEXT): $(TELETEXTSRC)
+$(TELETEXT): teletext.asm charset1.asm
 
 # SPLASH - the splash screen
 $(SPLASH): splash.asm
