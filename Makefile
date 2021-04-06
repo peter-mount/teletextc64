@@ -5,12 +5,13 @@
 TELETEXT	= teletext.prg		# C64 teletext module
 SPLASH		= splash.prg		# Splash page in PRG format
 TESTCARD	= testcard.prg		# Teletext test card in PRG format
-
+ASCIICARD	= asciicard.prg		# Teletext ASCII chart Text mode
+GRAPHICSCARD= graphicscard.prg	# Teletext ASCII chart Graphics mode
 DISK		= testcard.d64
 
 TELETEXTSRC = teletext.asm charset.asm
 
-TARGETS = $(TELETEXT) $(SPLASH) $(TESTCARD)
+TARGETS = $(TELETEXT) $(SPLASH) $(TESTCARD) $(ASCIICARD) $(GRAPHICSCARD)
 
 export CP				= @cp -p
 export BEEBASM 			= beebasm
@@ -33,6 +34,10 @@ $(SPLASH): splash.asm
 
 # TESTCARD - Debugging Teletext test card
 $(TESTCARD): testcard.asm
+
+$(ASCIICARD): asciicard.asm
+
+$(GRAPHICSCARD): graphicscard.asm
 
 # C64 assemble .prg executable
 %.prg: %.asm
