@@ -260,6 +260,14 @@ defaultColour   = &10           ; White on Black at start of each line
     ORA textMode
     JMP deTextMode
 
+.checkMode                                      ; Check graphics/text modes
+{
+    JSR setTextMode
+    BCS C0                                      ; Have we changed anything
+    RTS
+.C0 JMP refreshLineColour                       ; Refresh line
+}
+
 .setTextMode                                    ; Set text mode based on char A
 {
     CMP #140                                    ; Normal height
@@ -381,14 +389,6 @@ defaultColour   = &10           ; White on Black at start of each line
 .L0 CMP #127
     BEQ D0                                      ; Delete previous char
 }                                               ; follow through to oswrchDir
-
-.checkMode                                      ; Check graphics/text modes
-{
-    JSR setTextMode
-    BCS C0                                      ; Have we changed anything
-    RTS
-.C0 JMP refreshLineColour                       ; Refresh line
-}
 
 .oswrchDir                                      ; Entry point without processing VDU codes
 {
@@ -820,7 +820,7 @@ defaultColour   = &10           ; White on Black at start of each line
 .GR2                        ; Separated graphics
     EQUB &00, &E0, &0E, &EE
 
-    INCLUDE "charset.asm"   ; Include our char definitions
+    INCLUDE "charset1.asm"  ; Include our char definitions
 
 .end
 
