@@ -81,6 +81,8 @@ defaultColour   = &10           ; White on Black at start of each line
 .oswrch         JMP oswrchInt                   ; Write char to screen              VDU A
 .writeString    JMP writeStringInt              ; Write null terminated string in XY
 .refreshScreen  JMP refreshScreenInt            ; Refresh the screen to the buffer state
+.clearStatusV   JMP clearStatus
+.showStatusV    JMP showStatus
 
 ; **********************************************************************
 
@@ -820,6 +822,7 @@ defaultColour   = &10           ; White on Black at start of each line
 .GR2                        ; Separated graphics
     EQUB &00, &E0, &0E, &EE
 
+    INCLUDE "prompt.asm"    ; Prompt utilities
     INCLUDE "charset1.asm"  ; Include our char definitions
 
 .end

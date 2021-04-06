@@ -89,6 +89,12 @@ writeString = oswrch + 3
 ;
 refreshScreen   = writeString + 3
 
-showPrompt      = refreshScreen + 3
-clearStatus     = showPrompt + 3
+; The status line is the right half of the top line, usually used for showing
+; a filename, page name etc on Viewdata based sites.
+;
+; clearStatus   Clears the status area
+clearStatus     = refreshScreen + 3
+
+; showStatus    Writes a null terminated string in the status area. The text will be left justified
+;               and limited to the status area.
 showStatus      = clearStatus + 3
