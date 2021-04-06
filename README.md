@@ -60,6 +60,18 @@ the internal state of oswrch so that it only terminates on a null if there are n
 
 For example: the sequence 31,0,10 will position the cursor at column 0 of row 10 but will not terminate the string.
 
+Here's an example from the [departures8bit](https://github.com/peter-mount/departures8bit) project:
+
+    .writeTeletextBanner
+        LDX #<banner
+        LDY #>banner
+        JMP writeString
+    .banner
+        EQUS 30, 134, "departureboards.mobi", 13, 10
+        EQUS 132, 157, 135, 141, 31, 9, 1, "Live UK Departure Boards"
+        EQUS 132, 157, 135, 141, 31, 9, 2, "Live UK Departure Boards"
+        EQUS 10, 130, "Please wait whilst loading completes...", 0
+
 ### C014 refreshScreen
 
 This routine will refresh the screen with the contents of the framebuffer. It's useful if the framebuffer was updated
