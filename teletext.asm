@@ -251,13 +251,14 @@ defaultColour   = &10           ; White on Black at start of each line
 .disableTextMode                                ; Disable textMode flag
     EOR #&FF                                    ; Invert A
     AND textMode                                ; AND it with current mode
+.deTextMode
     STA textMode                                ; Set new mode
+    SEC                                         ; Flag changed
     RTS
 
 .enableTextMode                                 ; Enable textMode flag
     ORA textMode
-    STA textMode
-    RTS
+    JMP deTextMode
 
 .setTextMode                                    ; Set text mode based on char A
 {
@@ -286,7 +287,8 @@ defaultColour   = &10           ; White on Black at start of each line
     BNE LE
     LDA #tmGraphics
     JMP enableTextMode
-.LE RTS
+.LE CLC                                         ; Mark as unchanged
+    RTS
 }
 
 .writeStringInt                                 ; Writes string at X,Y terminating at 0
@@ -376,32 +378,17 @@ defaultColour   = &10           ; White on Black at start of each line
     STA (textPos),Y                             ; Save char in textRam
     JMP teletextWrchr                           ; erase what's there & exit
 
-.*checkMode                                     ; Check graphics/text modes
-    CMP #140                                    ; Normal height
-    BEQ CN
-    CMP #141
-    BEQ CD
-    CMP #153                                    ; Contiguous graphics
-    BEQ CG
-    CMP #154                                    ; Separated graphics
-    BEQ CS
-    AND #&68                                    ; If not &80-&87 or &90-&97 then exit otherwise
-    BEQ C0                                      ; refresh line to get colours. &68 mask works as in those
-    RTS                                         ; ranges those bits are clear. Bit 8 is always set.
-
-.CG LDA #tmGraphics
-    BNE C1
-.CS LDA #tmGraphics OR tmSepGraphics
-    BNE C1
-.CD LDA #tmDouble                               ; Double height
-    BNE C1                                      ; tmDouble !=0 so implicit bra
-.CN LDA #tmNormal                               ; Normal height text mode
-.C1 STA textMode
-.C0 JMP refreshLineColour                       ; Refresh line
-
 .L0 CMP #127
     BEQ D0                                      ; Delete previous char
 }                                               ; follow through to oswrchDir
+
+.checkMode                                      ; Check graphics/text modes
+{
+    JSR setTextMode
+    BCS C0                                      ; Have we changed anything
+    RTS
+.C0 JMP refreshLineColour                       ; Refresh line
+}
 
 .oswrchDir                                      ; Entry point without processing VDU codes
 {
@@ -490,7 +477,14 @@ defaultColour   = &10           ; White on Black at start of each line
 ; teletextWrchr     Write char in A to current text pos
 .teletextWrchr
 {
-    CMP #128                                    ; Normal text
+    AND #&7F                                    ; Convert to 7 bit
+    CMP #' '                                    ; < 32 then control char
+    BMI W0
+    BIT textMode                                ; Are we in graphics mode?
+    BPL W1                                      ; No then skip
+.W0 ORA #&80                                    ; Force graphics
+
+.W1 CMP #128                                    ; Normal text
     BMI A1
 
     CMP #224                                    ; 224-255 graphics
